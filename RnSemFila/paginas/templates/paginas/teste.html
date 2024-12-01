@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RN SemFila</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            azul: { rn: '#4998B4', escuro: '#061E3C', hover: '#145870' },
+            amarelo: { rn: '#FAD55C', hover: '#BA951D' },
+            vermelho: '#F15A66',
+            verde: '#9AB084',
+          },
+          fontFamily: {
+            montserrat: ['Montserrat', 'sans-serif'],
+            poppins: ['Poppins', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gray-100 font-poppins">
+  <header class="flex items-center justify-between px-8 py-4 bg-white shadow-md">
+    <h1 class="text-2xl font-bold">
+      RN <span class="text-azul-rn">SemFila</span>
+    </h1>
+    <button class="px-4 py-2 bg-amarelo-rn hover:bg-amarelo-hover text-white font-semibold rounded-md">
+      entrar
+    </button>
+  </header>
+
+  <main class="max-w-4xl mx-auto p-6">
+    <div class="text-center my-6">
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="busque o seu hospital aqui"
+        class="w-full max-w-lg px-4 py-2 border border-gray-300 rounded-lg shadow-sm"
+        oninput="filterBySearch()"
+      />
+    </div>
+
+    <div class="flex justify-center space-x-4 mb-6">
+      <button
+        id="filter-ubs"
+        class="filter-btn px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg flex items-center"
+        onclick="filterByCategory('UBS', 'filter-ubs')"
+      >
+        UBS
+      </button>
+      <button
+        id="filter-upa"
+        class="filter-btn px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg flex items-center"
+        onclick="filterByCategory('UPA', 'filter-upa')"
+      >
+        UPA
+      </button>
+      <button
+        id="filter-hospital"
+        class="filter-btn px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg flex items-center"
+        onclick="filterByCategory('Hospital', 'filter-hospital')"
+      >
+        Hospitais
+      </button>
+    </div>
+
+    <h2 class="text-xl font-semibold mb-4">Unidades próximas a você</h2>
+    <div id="unitsContainer" class="space-y-6">
+   
+      <div class="flex items-center p-4 bg-white rounded-lg shadow-md" data-category="UBS">
+        <img src="{% static 'paginas/img/upae.jpeg' %}" alt="UBS Pitimbu" class="w-24 h-24 rounded-lg object-cover" />
+        <div class="ml-4 flex-1">
+          <h3 class="text-lg font-semibold">
+            UBS Pitimbu Dr. Abelardo Calafange
+            <span class="cursor-pointer text-yellow-400 hover:text-yellow-500" onclick="toggleFavorite(this)">⭐</span>
+          </h3>
+          <p class="text-sm text-gray-500">0,9 km - Movimento: Alto</p>
+          <div class="mt-2 text-sm bg-red-200 text-red-600 px-3 py-1 rounded-md inline-block">Estimativa de espera: 100min</div>
+        </div>
+        <button class="px-4 py-2 bg-azul-rn hover:bg-azul-hover text-white rounded-md">Ver detalhes</button>
+      </div>
+
+      <div class="flex items-center p-4 bg-white rounded-lg shadow-md" data-category="UPA">
+        <img src="{% static 'paginas/img/upap.jpeg' %}" alt="UPA Cidade Satélite" class="w-24 h-24 rounded-lg object-cover" />
+        <div class="ml-4 flex-1">
+          <h3 class="text-lg font-semibold">
+            UPA Cidade Satélite - Zona Sul
+            <span class="cursor-pointer text-yellow-400 hover:text-yellow-500" onclick="toggleFavorite(this)">⭐</span>
+          </h3>
+          <p class="text-sm text-gray-500">2,4 km - Movimento: Médio</p>
+          <div class="mt-2 text-sm bg-yellow-200 text-yellow-600 px-3 py-1 rounded-md inline-block">Estimativa de espera: 40min</div>
+        </div>
+        <button class="px-4 py-2 bg-azul-rn hover:bg-azul-hover text-white rounded-md">Ver detalhes</button>
+      </div>
+
+      <div class="flex items-center p-4 bg-white rounded-lg shadow-md" data-category="Hospital">
+        <img src="{% static 'paginas/img/upau.jpeg' %}" alt="Hospital Cidade Esperança" class="w-24 h-24 rounded-lg object-cover" />
+        <div class="ml-4 flex-1">
+          <h3 class="text-lg font-semibold">
+            Hospital Cidade Esperança
+            <span class="cursor-pointer text-yellow-400 hover:text-yellow-500" onclick="toggleFavorite(this)">⭐</span>
+          </h3>
+          <p class="text-sm text-gray-500">4,6 km - Movimento: Baixo</p>
+          <div class="mt-2 text-sm bg-green-200 text-green-600 px-3 py-1 rounded-md inline-block">Estimativa de espera: 15min</div>
+        </div>
+        <button class="px-4 py-2 bg-azul-rn hover:bg-azul-hover text-white rounded-md">Ver detalhes</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let activeFilter = null;
+
+    function filterByCategory(category, buttonId) {
+      const buttons = document.querySelectorAll('.filter-btn');
+      const cards = document.querySelectorAll('[data-category]');
+      const button = document.getElementById(buttonId);
+
+      if (activeFilter === category) {
+        // tirando filtro
+        cards.forEach(card => (card.style.display = 'flex'));
+        buttons.forEach(btn => btn.classList.remove('bg-azul-rn', 'text-white'));
+        activeFilter = null;
+      } else {
+        // inserindo filtro
+        cards.forEach(card => {
+          card.style.display = card.dataset.category.includes(category) ? 'flex' : 'none';
+        });
+        buttons.forEach(btn => btn.classList.remove('bg-azul-rn', 'text-white'));
+        button.classList.add('bg-azul-rn', 'text-white');
+        activeFilter = category;
+      }
+    }
+
+    function filterBySearch() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('[data-category]');
+      cards.forEach(card => {
+        card.style.display = card.innerText.toLowerCase().includes(input) ? 'flex' : 'none';
+      });
+    }
+
+    function toggleFavorite(star) {
+      star.classList.toggle('text-yellow-500');
+    }
+  </script>
+</body>
+</html>
