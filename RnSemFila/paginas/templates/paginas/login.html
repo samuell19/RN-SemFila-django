@@ -32,13 +32,31 @@
     body {
       font-family: 'Montserrat', sans-serif;
     }
+    .teste{
+    display: flex;
+    justify-content: center;
+    margin: 0;
+}
+    .button-cadastro {
+      width: 100% !important;
+    }
+
+    .button-cadastro span{
+      width: 100% !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   </style>
+  <link rel="stylesheet" href="RnSemFila/static/css/login.css">
 </head>
 <body class="min-h-screen font-montserrat">
     <header class="w-64 p-6">
+      <a href="{% url 'lista' %}">
         <h1 class="text-3xl font-bold text-gray-800">
             RN <span class="text-azul-rn">SemFila</span>
         </h1>
+      </a>
     </header>
 
   <div class="flex items-center justify-center min-h-[calc(100vh-80px)]">
@@ -64,7 +82,7 @@
           
     
           <div class="text-right mb-6">
-            <a href="#" class="text-azul-hover hover:underline text-sm">Esqueceu sua senha?</a>
+            <a href={% url 'esqueceu' %} class="text-azul-hover hover:underline text-sm">Esqueceu sua senha?</a>
           </div>
           
         
@@ -73,10 +91,14 @@
               class="w-full bg-amarelo-rn text-white py-3 rounded-lg font-bold hover:bg-amarelo-hover transition">
               Entrar
             </button>
-            <button type="button" 
-              class="w-full bg-azul-rn text-white py-3 rounded-lg font-bold hover:bg-azul-hover transition">
-              Cadastrar
-            </button>
+            
+            <a href="{% url 'cadastros' %}" class="anchor-cadastrar w-full bg-azul-rn text-white py-3 rounded-lg font-bold hover:bg-azul-hover transition">
+              <button class="button-cadastro"  type="button">
+                <span class="teste">Cadastrar</span>
+              </button>
+            </a>
+
+
           </div>
         </form>
         

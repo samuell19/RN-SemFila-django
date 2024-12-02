@@ -29,12 +29,16 @@
 </head>
 <body class="min-h-screen bg-gray-100 font-poppins">
   <header class="flex items-center justify-between px-8 py-4 bg-white shadow-md">
+  <a href="{% url 'lista' %}"> 
     <h1 class="text-2xl font-bold">
       RN <span class="text-azul-rn">SemFila</span>
     </h1>
+  </a>
+  <a href="{% url 'login' %}">
     <button class="px-4 py-2 bg-amarelo-rn hover:bg-amarelo-hover text-white font-semibold rounded-md">
-      entrar
+      Entrar
     </button>
+  </a>
   </header>
 
   <main class="max-w-4xl mx-auto p-6">
