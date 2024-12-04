@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            azul: {
+              rn: '#4998B4',
+              escuro: '#061E3C',
+              hover: '#145870'
+            },
+            amarelo: {
+              rn: '#FAD55C',
+              hover: '#BA951D'
+            }
+          },
+          fontFamily: {
+            montserrat: ['Montserrat', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+    }
+    .teste{
+      display: flex;
+      justify-content: center;
+      margin: 0;
+    }
+    .button-cadastro {
+      width: 100% !important;
+    }
+
+    .button-cadastro span{
+      width: 100% !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .relative {
+      position: relative;
+    }
+    .absolute {
+      position: absolute;
+    }
+    .inset-y-0 {
+      top: 0;
+      bottom: 0;
+    }
+    .right-3 {
+      right: 0.75rem;
+    }
+    .flex {
+      display: flex;
+    }
+    .items-center {
+      align-items: center;
+    }
+    .cursor-pointer {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="min-h-screen font-montserrat">
+  <header class="w-64 p-6">
+    <a href="{% url 'home' %}">
+      <h1 class="text-3xl font-bold text-gray-800">
+        RN <span class="text-azul-rn">SemFila</span>
+      </h1>
+    </a>
+  </header>
+
+  <div class="flex items-center justify-center min-h-[calc(100vh-80px)]">
+    <div class="w-full max-w-md px-6 lg:px-0">
+
+      <div class="bg-white p-8 rounded-lg shadow-md">
+        <h2 class="text-center text-2xl font-semibold text-azul-rn mb-6">Entrar</h2>
+
+        <form method="POST">
+          {% csrf_token %}
+          {% if form.errors %}
+            <div class="alert alert-danger mb-4">
+              <strong>Erro!</strong> Corrija os campos destacados abaixo.
+            </div>
+          {% endif %}
+
+          <div class="mb-4">
+            <input type="text" name="username" placeholder="Digite o seu nome de usuário"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-azul-rn transition duration-300">
+          </div>
+          
+          <div class="mb-4 relative">
+            <input id="password" type="password" name="password" placeholder="Digite a sua senha"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-azul-rn transition duration-300">
+            
+            <span class="absolute inset-y-0 right-3 flex items-center cursor-pointer" id="togglePassword">
+              <img id="eyeIcon" src="https://img.icons8.com/ios-glyphs/24/000000/visible--v1.png" alt="Exibir senha">
+            </span>
+          </div>
+          
+          <script>
+            document.getElementById('togglePassword').addEventListener('click', function () {
+              const passwordField = document.getElementById('password');
+              const type = passwordField.type === 'password' ? 'text' : 'password';
+              passwordField.type = type;
+            });
+          </script>
+        
+          <div class="text-right mb-6">
+            <a href="{% url 'esqueceu' %}" class="text-azul-hover hover:underline text-sm">Esqueceu sua senha?</a>
+          </div>
+
+          <div class="flex justify-between space-x-4">
+            <button type="submit" 
+              class="w-full bg-amarelo-rn text-white py-3 rounded-lg font-bold hover:bg-amarelo-hover transition">
+              Entrar
+            </button>
+
+            <a href="{% url 'cadastros' %}" class="anchor-cadastrar w-full bg-azul-rn text-white py-3 rounded-lg font-bold hover:bg-azul-hover transition">
+              <button class="button-cadastro" type="button">
+                <span class="teste">Cadastrar</span>
+              </button>
+            </a>
+          </div>
+        </form>
+
+        <div class="mt-6 text-center text-gray-500">ou</div>
+
+        <div class="mt-6 space-y-3">
+          <button class="w-full flex items-center justify-center bg-gray-100 py-3 rounded-lg hover:bg-gray-200 transition duration-300">
+            <img src="https://img.icons8.com/color/24/google-logo.png" alt="Google" class="mr-2"> Continue com Google
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
